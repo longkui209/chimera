@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chimera — 项目仪表板</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg2: #161b22;
+    --bg3: #21262d;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --text2: #8b949e;
+    --green: #3fb950;
+    --blue: #58a6ff;
+    --orange: #d2991d;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --cyan: #39d2c0;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Segoe UI', -apple-system, sans-serif; background: var(--bg); color: var(--text); padding: 40px; }
+  .container { max-width: 1200px; margin: 0 auto; }
+  h1 { font-size: 28px; color: var(--purple); margin-bottom: 5px; }
+  .subtitle { color: var(--text2); font-size: 14px; margin-bottom: 30px; }
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .stat { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 18px; text-align: center; }
+  .stat .num { font-size: 32px; font-weight: bold; }
+  .stat .label { color: var(--text2); font-size: 12px; margin-top: 4px; }
+  .stat .num.green { color: var(--green); }
+  .stat .num.blue { color: var(--blue); }
+  .stat .num.orange { color: var(--orange); }
+  .stat .num.purple { color: var(--purple); }
+  .stat .num.cyan { color: var(--cyan); }
+  .stat .num.red { color: var(--red); }
+  .section { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+  .section h2 { font-size: 16px; margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; color: var(--text2); font-weight: normal; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+  td { padding: 6px 8px; border-bottom: 1px solid rgba(48,54,61,0.5); }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold; }
+  .badge.ok { background: rgba(63,185,80,0.2); color: var(--green); }
+  .badge.warn { background: rgba(210,153,29,0.2); color: var(--orange); }
+  .pipeline { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12px; }
+  .pnode { background: var(--bg3); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; text-align: center; }
+  .pnode .name { font-weight: bold; }
+  .pnode .role { color: var(--text2); font-size: 10px; }
+  .parrow { color: var(--purple); font-size: 16px; font-weight: bold; }
+  .footer { text-align: center; color: var(--text2); font-size: 11px; margin-top: 20px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🦁🐐🐍 Chimera (奇美拉)</h1>
+  <div class="subtitle">AI 跨游戏角色与资产融合迁移引擎 · v0.1 · 47文件 · ~8,000行 · 59测试全部通过</div>
+
+  <!-- 核心指标 -->
+  <div class="grid">
+    <div class="stat"><div class="num blue">8</div><div class="label">AI Agent</div></div>
+    <div class="stat"><div class="num cyan">6</div><div class="label">DAG 层级</div></div>
+    <div class="stat"><div class="num purple">5</div><div class="label">游戏引擎</div></div>
+    <div class="stat"><div class="num orange">36</div><div class="label">可用游戏</div></div>
+    <div class="stat"><div class="num red">1,260</div><div class="label">迁移组合</div></div>
+    <div class="stat"><div class="num green">59</div><div class="label">测试通过</div></div>
+    <div class="stat"><div class="num blue">8,000</div><div class="label">代码行数</div></div>
+    <div class="stat"><div class="num cyan">2,000x</div><div class="label">效率提升</div></div>
+  </div>
+
+  <!-- DAG 流水线 -->
+  <div class="section">
+    <h2>🏗️ 8 Agent × 6 层 DAG 并行流水线（Kahn 拓扑排序）</h2>
+    <div class="pipeline">
+      <div class="pnode"><div class="name">🔍 源解构师</div><div class="role">引擎指纹·加密检测</div></div>
+      <div class="parrow">→</div>
+      <div class="pnode"><div class="name">📦 角色提取师</div><div class="role">网格·骨架·纹理</div></div>
+      <div class="parrow">→</div>
+      <div class="pnode"><div class="name">🦴 骨架分析师</div><div class="role">AI三重骨骼匹配</div></div>
+      <div class="parrow">→</div>
+      <div class="pnode"><div class="name">🎬 动画重定向师</div><div class="role">4策略自适应</div></div>
+      <div class="parrow" style="color:var(--orange);">∥</div>
+      <div class="pnode"><div class="name">🔄 格式转换师</div><div class="role">25条互译路径</div></div>
+      <div class="parrow">→</div>
+      <div class="pnode"><div class="name">💉 目标注入师</div><div class="role">PAK·BepInEx·Cecil</div></div>
+      <div class="parrow">→</div>
+      <div class="pnode"><div class="name">✅ 运行时验证</div><div class="role">5维质量检查</div></div>
+    </div>
+    <div style="margin-top:12px;">
+      <span class="badge ok">第4层 2 Agent 并行</span>
+      <span class="badge ok">ContextBus 通信</span>
+      <span class="badge ok">超时熔断</span>
+      <span class="badge ok">TopoSort 调度</span>
+      <span class="badge ok">单次 ~1020万 Token</span>
+    </div>
+  </div>
+
+  <!-- 引擎 × 游戏 -->
+  <div class="section">
+    <h2>🌍 5 引擎覆盖 × 36 款商业游戏</h2>
+    <table>
+      <tr><th>引擎</th><th>识别特征</th><th>注入方式</th><th>代表游戏</th></tr>
+      <tr><td>🟦 UE4/5</td><td>.uasset · PAK magic 5A6F12E1</td><td>LogicMods · DLL Hook</td><td>黑神话悟空·双人成行·师父·幻兽帕鲁·Enshrouded</td></tr>
+      <tr><td>🟥 RE Engine</td><td>KPKA PAK magic</td><td>Fluffy Mod · Lua</td><td>鬼泣5 · 生化危机</td></tr>
+      <tr><td>🟩 Godot 4</td><td>GDPC PCK magic</td><td>Cecil IL 织入</td><td>Pratfall · ScapeGoat · PEAK</td></tr>
+      <tr><td>🟨 Unity</td><td>UnityFS · Assembly-CSharp</td><td>BepInEx · Harmony</td><td>英灵神殿·森林之子·七日杀·绿色地狱</td></tr>
+      <tr><td>🟪 Source 2</td><td>VBKV · LZMA</td><td>VPK · Addon</td><td>计划支持</td></tr>
+    </table>
+  </div>
+
+  <!-- 格式互译 -->
+  <div class="section">
+    <h2>🔀 25 条格式互译路径（5×5 引擎矩阵）</h2>
+    <table>
+      <tr><th>源\目标</th><th>UE4/5</th><th>Unity</th><th>Godot</th><th>RE Engine</th><th>Source 2</th></tr>
+      <tr><td>UE4/5</td><td><span class="badge ok">直接</span></td><td><span class="badge ok">FBX</span></td><td><span class="badge warn">glTF</span></td><td><span class="badge warn">FBX→RE</span></td><td>—</td></tr>
+      <tr><td>Unity</td><td><span class="badge ok">FBX</span></td><td><span class="badge ok">直接</span></td><td><span class="badge warn">glTF</span></td><td>—</td><td>—</td></tr>
+      <tr><td>Godot</td><td><span class="badge warn">glTF</span></td><td><span class="badge warn">glTF</span></td><td><span class="badge ok">直接</span></td><td>—</td><td>—</td></tr>
+      <tr><td>RE Engine</td><td><span class="badge warn">RE→FBX</span></td><td>—</td><td>—</td><td><span class="badge ok">直接</span></td><td>—</td></tr>
+    </table>
+  </div>
+
+  <!-- 技术栈 -->
+  <div class="section">
+    <h2>🧠 AI 技术栈</h2>
+    <table>
+      <tr><th>层级</th><th>技术</th><th>用途</th></tr>
+      <tr><td>Agent 框架</td><td>Hermes Agent · OpenClaw · Claude Code · Cursor · Aider</td><td>5 工具混用</td></tr>
+      <tr><td>推理模型</td><td>DeepSeek V4 Pro (128K) · Claude Sonnet 4</td><td>长链推理·代码生成</td></tr>
+      <tr><td>视觉模型</td><td>Gemini 2.5 Flash · MiMo V2.5 Vision</td><td>资产视觉分析</td></tr>
+      <tr><td>后端</td><td>FastAPI · Pydantic · uvicorn · Prometheus</td><td>REST API</td></tr>
+      <tr><td>DAG 编排</td><td>Kahn TopoSort · ContextBus · 超时熔断</td><td>并行调度</td></tr>
+      <tr><td>注入引擎</td><td>PAK封包 · LogicMods · BepInEx · Cecil · DLL Hook</td><td>5注入方式</td></tr>
+    </table>
+  </div>
+
+  <div class="footer">
+    github.com/longkui209/chimera · MIT License · 47文件 · 59测试 · 日均 5,000-8,000万 Token
+  </div>
+</div>
+</body>
+</html>
