@@ -1,0 +1,63 @@
+# ============================================================
+# Chimera Docker Compose
+# ============================================================
+
+version: "3.8"
+
+services:
+  chimera:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: chimera-engine
+    restart: unless-stopped
+    ports:
+      - "8004:8004"
+    volumes:
+      # 游戏库（只读）
+      - /mnt/hgfs/common:/data/games:ro
+      # 知识库持久化
+      - chimera_knowledge:/app/chimera/knowledge
+      # 日志
+      - chimera_logs:/app/chimera/logs
+      # 输出
+      - chimera_output:/app/chimera/output
+    environment:
+      - CHIMERA_API_HOST=0.0.0.0
+      - CHIMERA_API_PORT=8004
+      - CHIMERA_VISION_MODEL=gemini-2.5-flash
+      - CHIMERA_REASONING_MODEL=deepseek-v4-pro
+      - CHIMERA_CODE_MODEL=claude-sonnet-4
+      - PYTHONUNBUFFERED=1
+    networks:
+      - chimera_net
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # 可选：Nginx 反向代理
+  nginx:
+    image: nginx:alpine
+    container_name: chimera-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - chimera
+    networks:
+      - chimera_net
+    profiles:
+      - production
+
+volumes:
+  chimera_knowledge:
+  chimera_logs:
+  chimera_output:
+
+networks:
+  chimera_net:
+    driver: bridge

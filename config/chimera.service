@@ -1,0 +1,42 @@
+# ============================================================
+# Chimera Systemd Service
+# 安装: sudo cp chimera.service /etc/systemd/system/
+#       sudo systemctl daemon-reload
+#       sudo systemctl enable --now chimera
+# ============================================================
+
+[Unit]
+Description=Chimera - AI Cross-Game Character Migration Engine
+Documentation=https://github.com/MoWang-727/chimera
+After=network.target
+
+[Service]
+Type=simple
+User=chenyixun710
+WorkingDirectory=/data/chimera
+Environment="PYTHONPATH=/data/chimera"
+Environment="CHIMERA_API_HOST=0.0.0.0"
+Environment="CHIMERA_API_PORT=8004"
+ExecStart=/usr/bin/python3 -m uvicorn api.server:app --host 0.0.0.0 --port 8004 --log-level info
+ExecStop=/bin/kill -TERM $MAINPID
+Restart=on-failure
+RestartSec=5
+
+# 日志
+StandardOutput=append:/data/chimera/logs/chimera.log
+StandardError=append:/data/chimera/logs/chimera_error.log
+
+# 资源限制
+MemoryMax=4G
+CPUQuota=200%
+
+# 安全加固
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=no
+ReadWritePaths=/data/chimera
+ReadOnlyPaths=/mnt/hgfs/common
+
+[Install]
+WantedBy=multi-user.target

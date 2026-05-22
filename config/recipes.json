@@ -1,0 +1,168 @@
+{
+  "_comment": "Chimera 迁移配方库 — 预定义的跨游戏迁移配置",
+  "version": "0.1.0",
+  "recipes": [
+    {
+      "id": "wukong_to_valheim",
+      "name": "大圣降临英灵神殿",
+      "description": "将黑神话悟空主角模型移植到英灵神殿",
+      "source": {
+        "game_id": "black_myth_wukong",
+        "game_path": "/mnt/hgfs/common/BlackMythWukong",
+        "engine": "ue4",
+        "character": "DestinedOne"
+      },
+      "target": {
+        "game_id": "valheim",
+        "game_path": "/mnt/hgfs/common/Valheim",
+        "engine": "unity",
+        "injection": "bepinex"
+      },
+      "complexity": "very_high",
+      "estimated_time": "45-60 min",
+      "estimated_tokens": "15M",
+      "notes": "跨引擎 UE5→Unity，需要 FBX 中间格式 + Humanoid 骨架适配"
+    },
+    {
+      "id": "dante_to_enshrouded",
+      "name": "但丁降临迷雾",
+      "description": "将鬼泣5但丁移植到 Enshrouded",
+      "source": {
+        "game_id": "dmc5",
+        "game_path": "/mnt/hgfs/common/Devil May Cry 5",
+        "engine": "re",
+        "character": "Dante"
+      },
+      "target": {
+        "game_id": "enshrouded",
+        "game_path": "/mnt/hgfs/common/Enshrouded",
+        "engine": "ue4",
+        "injection": "logicmods"
+      },
+      "complexity": "very_high",
+      "estimated_time": "50-70 min",
+      "estimated_tokens": "18M",
+      "notes": "RE Engine→UE4，需要自研 RE Mesh 解析器"
+    },
+    {
+      "id": "cody_to_palworld",
+      "name": "Cody 带帕鲁冒险",
+      "description": "将双人成行 Cody 移植到幻兽帕鲁",
+      "source": {
+        "game_id": "ittakestwo",
+        "game_path": "/mnt/hgfs/common/ItTakesTwo",
+        "engine": "ue4",
+        "character": "Cody"
+      },
+      "target": {
+        "game_id": "palworld",
+        "game_path": "/mnt/hgfs/common/Palworld",
+        "engine": "ue4",
+        "injection": "logicmods"
+      },
+      "complexity": "medium",
+      "estimated_time": "10-20 min",
+      "estimated_tokens": "8M",
+      "notes": "同引擎 UE4→UE4，可直接 PAK 封包迁移"
+    },
+    {
+      "id": "palworld_to_valheim",
+      "name": "帕鲁维京生存",
+      "description": "将幻兽帕鲁角色移植到英灵神殿",
+      "source": {
+        "game_id": "palworld",
+        "game_path": "/mnt/hgfs/common/Palworld",
+        "engine": "ue4",
+        "character": "Pal"
+      },
+      "target": {
+        "game_id": "valheim",
+        "game_path": "/mnt/hgfs/common/Valheim",
+        "engine": "unity",
+        "injection": "bepinex"
+      },
+      "complexity": "high",
+      "estimated_time": "30-45 min",
+      "estimated_tokens": "12M",
+      "notes": "跨引擎 UE4→Unity，FBX 中间格式"
+    },
+    {
+      "id": "sifu_to_forest",
+      "name": "功夫大师荒野求生",
+      "description": "将师父主角移植到森林之子",
+      "source": {
+        "game_id": "sifu",
+        "game_path": "/mnt/hgfs/common/Sifu",
+        "engine": "ue4",
+        "character": "Protagonist"
+      },
+      "target": {
+        "game_id": "sons_of_the_forest",
+        "game_path": "/mnt/hgfs/common/Sons Of The Forest",
+        "engine": "unity",
+        "injection": "bepinex"
+      },
+      "complexity": "high",
+      "estimated_time": "30-45 min",
+      "estimated_tokens": "12M",
+      "notes": "跨引擎 UE4→Unity"
+    },
+    {
+      "id": "grounded_to_palworld",
+      "name": "缩小人在帕鲁世界",
+      "description": "将禁闭求生角色移植到幻兽帕鲁",
+      "source": {
+        "game_id": "grounded",
+        "game_path": "/mnt/hgfs/common/Grounded",
+        "engine": "ue4",
+        "character": "Player"
+      },
+      "target": {
+        "game_id": "palworld",
+        "game_path": "/mnt/hgfs/common/Palworld",
+        "engine": "ue4",
+        "injection": "logicmods"
+      },
+      "complexity": "low",
+      "estimated_time": "5-15 min",
+      "estimated_tokens": "6M",
+      "notes": "同引擎 UE4→UE4，直接迁移"
+    },
+    {
+      "id": "pratfall_to_godot",
+      "name": "Pratfall 角色迁移",
+      "description": "Pratfall 同引擎角色迁移测试",
+      "source": {
+        "game_id": "pratfall",
+        "game_path": "/mnt/hgfs/common/Pratfall",
+        "engine": "godot",
+        "character": "Player"
+      },
+      "target": {
+        "game_id": "pratfall",
+        "game_path": "/mnt/hgfs/common/Pratfall",
+        "engine": "godot",
+        "injection": "cecil_weave"
+      },
+      "complexity": "medium",
+      "estimated_time": "10-20 min",
+      "estimated_tokens": "8M",
+      "notes": "Godot→Godot 自迁移测试"
+    }
+  ],
+  "stats": {
+    "total_recipes": 7,
+    "by_complexity": {
+      "low": 1,
+      "medium": 2,
+      "high": 2,
+      "very_high": 2
+    },
+    "by_engine_pair": {
+      "ue4→unity": 3,
+      "ue4→ue4": 2,
+      "re→ue4": 1,
+      "godot→godot": 1
+    }
+  }
+}

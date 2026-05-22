@@ -1,0 +1,154 @@
+name: Chimera CI
+
+on:
+  push:
+    branches: [main, master]
+    paths-ignore:
+      - '**.md'
+      - 'dashboard/**'
+      - 'docker/**'
+  pull_request:
+    branches: [main, master]
+    paths-ignore:
+      - '**.md'
+      - 'dashboard/**'
+      - 'docker/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ============================================================
+  # 代码检查
+  # ============================================================
+  lint:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install flake8 pylint mypy
+
+      - name: Run flake8
+        run: |
+          flake8 agents/ core/ api/ tools/ \
+            --max-line-length=120 \
+            --ignore=E501,W503,E203,E402 \
+            --count \
+            --statistics \
+            --exit-zero
+
+      - name: Syntax check
+        run: |
+          python3 -m compileall agents/ core/ api/ tools/ -q
+
+  # ============================================================
+  # 测试
+  # ============================================================
+  test:
+    name: Test (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.8', '3.10', '3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Create test directories
+        run: mkdir -p knowledge logs output
+
+      - name: Run tests
+        run: |
+          python3 -m pytest tests/test_core.py \
+            -v --tb=short --color=yes \
+            -k "not discover_games and not analyze_ittakestwo and not extract_ittakestwo and not full_pipeline" \
+            --junitxml=test-results.xml
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-py${{ matrix.python-version }}
+          path: test-results.xml
+
+  # ============================================================
+  # 代码统计
+  # ============================================================
+  stats:
+    name: Code Statistics
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Count lines
+        run: |
+          echo "📊 Chimera 代码统计"
+          echo "===================="
+          echo -n "Python:    "; find . -name "*.py" -not -path "*__pycache__*" -exec cat {} \; | wc -l
+          echo -n "Shell:     "; find . -name "*.sh" -exec cat {} \; | wc -l
+          echo -n "HTML/CSS:  "; find . -name "*.html" -exec cat {} \; | wc -l
+          echo -n "Markdown:  "; find . -name "*.md" -exec cat {} \; | wc -l
+          echo -n "YAML:      "; find . -name "*.yml" -exec cat {} \; | wc -l
+          echo -n "JSON:      "; find . -name "*.json" -exec cat {} \; | wc -l
+          echo -n "Config:    "; find . -name "*.conf" -exec cat {} \; | wc -l
+          echo -n "Docker:    "; find . -name "Dockerfile" -exec cat {} \; | wc -l
+          echo -n "Makefile:  "; cat Makefile 2>/dev/null | wc -l
+          echo "===================="
+          echo -n "总行数:    "; find . -type f \( -name "*.py" -o -name "*.sh" -o -name "*.html" -o -name "*.md" -o -name "*.yml" -o -name "*.json" -o -name "*.conf" -o -name "Dockerfile" -o -name "Makefile" \) -not -path "*__pycache__*" -exec cat {} \; 2>/dev/null | wc -l
+
+  # ============================================================
+  # Docker 构建验证
+  # ============================================================
+  docker:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    needs: [test]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -f docker/Dockerfile -t chimera:ci .
+
+      - name: Verify image
+        run: |
+          docker images chimera:ci
+          docker run --rm chimera:ci python3 -c "from core.config import Config; print(f'Chimera v{Config.API_PORT} OK')"
+
+  # ============================================================
+  # 发布检查（仅在 tag 时）
+  # ============================================================
+  release-check:
+    name: Release Check
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    needs: [test, lint, docker]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Version check
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          echo "Release version: $TAG"
+          echo "✅ All checks passed!"
